@@ -1,3 +1,11 @@
+/*
+	Do:
+		#define LIBHASHTABLE_IMPLEMENTATION 
+	to get access to the lib functions.
+	This should be done only one time !
+*/
+
+
 #ifndef LIBHASHTABLE_H
 # define LIBHASHTABLE_H
 
