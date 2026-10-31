@@ -243,10 +243,10 @@ char	*strTrimLeftUntilIsDelim(const char *s, int (*isdelimFn)(int c));
 char	*strTrimRightUntilIsDelim(const char *s, int (*isdelimFn)(int c));
 
 /**
- * @brief Returns the substring of @a s from @a start to @a end, inclusive.
+ * @brief Returns the substring of @a s from @a start to @a start + @a length characters.
  * @return The allocated substring, or NULL on failure.
  */
-char	*strSub(const char *s, size_t start, size_t end);
+char	*strSub(const char *s, size_t start, size_t length);
 
 /**
  * @brief Replaces every occurence of @a old_s with @a new_s in @a s.
@@ -903,17 +903,19 @@ char	*strTrimRightUntilIsDelim(const char *s, int (*isdelimFn)(int c))
 	return (trimmed);
 }
 
-char	*strSub(const char *s, size_t start, size_t end)
+char	*strSub(const char *s, size_t start, size_t length)
 {
 	const size_t	slen = strLength(s);
+	size_t			size = 0;
 	char			*sub;
 
-	if (NULL == s || start > slen || start > end)
+	if (NULL == s || start > slen)
 		return (NULL);
-	sub = malloc(((end < slen ? end : slen) - start + 2) * sizeof(char));
+	size = length > slen ? slen : length;
+	sub = malloc((size + 1) * sizeof(char));
 	if (NULL == sub)
 		return (NULL);
-	strCopyN(sub, s + start, end - start + 1);
+	strCopyN(sub, s + start, size);
 	return (sub);
 }
 
