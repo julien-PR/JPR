@@ -18,10 +18,13 @@
 # endif
 # include "libs/libllist/libllist.h"
 
+typedef void	(*t_hashtableEntryDestroyFn)(void *data);
+typedef void	*(*t_hashtableEntryDupFn)(const void *data);
+
 typedef struct s_hashTableEntry
 {
 	char	*key;
-	size_t	value;
+	void	*data;
 }	t_hashtableEntry;
 
 typedef struct s_hashTable
@@ -41,6 +44,9 @@ typedef struct s_hashTable
 	t_llist	**data;
 }	t_hashtable;
 
+extern t_hashtableEntryDestroyFn	hashtableEntryDestroyFunc;
+extern t_hashtableEntryDupFn		hashtableEntryDupFunc;
+
 /**
  * @brief Creates a new hash table.
  * @param initial_capacity The initial number of entries the table can store.
@@ -52,7 +58,7 @@ t_hashtable	*hashtableNew(size_t initial_capacity);
  * @brief Stores data inside the table if key is inexistent, updates it otherwise.
  * @return The updated hash table.
  */
-t_hashtable	*hashtableSet(t_hashtable *table, const char *key, const size_t value);
+t_hashtable	*hashtableSet(t_hashtable *table, const char *key, void *data);
 
 /**
  * @brief Searches the corresponding node inside the table.
@@ -80,7 +86,7 @@ void	hashtableDestroy(t_hashtable *table);
 
 static size_t	hashTableHash_private(const char *key)
 {
-	size_t	hashv;
+	size_t	hashv = 0;
 
 	if (NULL == key)
 		return (0);
@@ -92,7 +98,7 @@ static size_t	hashTableHash_private(const char *key)
 	return (hashv);
 }
 
-static t_hashtableEntry	*hashtableEntryNew_private(const char *key, size_t val)
+static t_hashtableEntry	*hashtableEntryNew_private(const char *key, void *data)
 {
 	t_hashtableEntry	*new;
 
@@ -105,15 +111,19 @@ static t_hashtableEntry	*hashtableEntryNew_private(const char *key, size_t val)
 		free(new);
 		return (NULL);
 	}
-	new->value = val;
+	new->data = data;
 	return (new);
 }
 
 static t_hashtableEntry	*hashtableEntryDup_private(const t_hashtableEntry *src)
 {
 	t_hashtableEntry	*dup;
+	void				*data;
 
-	dup = hashtableEntryNew_private(src->key, src->value);
+	data = hashtableEntryDupFunc(src->data);
+	if (NULL == data)
+		return (NULL);
+	dup = hashtableEntryNew_private(src->key, data);
 	if (NULL == dup)
 		return (NULL);
 	return (dup);
@@ -130,7 +140,8 @@ static void	hashtableEntryDestroy_private(t_hashtableEntry *entry)
 	if (NULL == entry)
 		return ;
 	free(entry->key);
-	// free(entry->value);
+	if (hashtableEntryDestroyFunc)
+		hashtableEntryDestroyFunc(entry->data);
 	free(entry);
 	return ;
 }
@@ -153,7 +164,7 @@ t_hashtable	*hashtableNew(size_t initial_capacity)
 	return (new);
 }
 
-t_hashtable	*hashtableSet(t_hashtable *table, const char *key, const size_t value)
+t_hashtable	*hashtableSet(t_hashtable *table, const char *key, void *data)
 {
 	size_t		hashv;
 	t_hashtableEntry	*entry;
@@ -161,7 +172,7 @@ t_hashtable	*hashtableSet(t_hashtable *table, const char *key, const size_t valu
 	if (NULL == table || NULL == key)
 		return (NULL);
 	hashv = hashTableHash_private(key);
-	entry = hashtableEntryNew_private(key, value);
+	entry = hashtableEntryNew_private(key, data);
 	if (NULL == entry)
 		return (NULL);
 	if (hashv >= table->capacity)
@@ -207,7 +218,12 @@ t_hashtable	*hashtableSet(t_hashtable *table, const char *key, const size_t valu
 		}
 		return (table);
 	}
-	((t_hashtableEntry *)node->data)->value = value;
+	if (hashtableEntryDupFunc)
+	{
+		((t_hashtableEntry *)node->data)->data = hashtableEntryDupFunc(data);
+		if (NULL == ((t_hashtableEntry *)node->data)->data)
+			return (NULL);
+	}
 	return (table);
 }
 
