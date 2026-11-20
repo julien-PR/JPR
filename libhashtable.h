@@ -84,18 +84,18 @@ void	hashtableEntryFuncDupSet(t_hashtableEntryFuncDup fn);
 # endif
 # include "libs/libstr/libstr.h"
 
-t_hashtableEntryFuncDestroy	hashtableEntryDestroyFunc = NULL;
-t_hashtableEntryFuncDup		hashtableEntryDupFunc = NULL;
+t_hashtableEntryFuncDestroy	private_hashtableEntryDestroyFunc = NULL;
+t_hashtableEntryFuncDup		private_hashtableEntryDupFunc = NULL;
 
 void	hashtableEntryFuncDestroySet(t_hashtableEntryFuncDestroy fn)
 {
-	hashtableEntryDestroyFunc = fn;
+	private_hashtableEntryDestroyFunc = fn;
 	return ;
 }
 
 void	hashtableEntryFuncDupSet(t_hashtableEntryFuncDup fn)
 {
-	hashtableEntryDupFunc = fn;
+	private_hashtableEntryDupFunc = fn;
 	return ;
 }
 
@@ -135,7 +135,7 @@ static t_hashtableEntry	*private_hashtableEntryDup(const t_hashtableEntry *src)
 	t_hashtableEntry	*dup;
 	void				*data;
 
-	data = hashtableEntryDupFunc(src->data);
+	data = private_hashtableEntryDupFunc(src->data);
 	if (NULL == data)
 		return (NULL);
 	dup = private_hashtableEntryNew(src->key, data);
@@ -155,8 +155,8 @@ static void	private_hashtableEntryDestroy(t_hashtableEntry *entry)
 	if (NULL == entry)
 		return ;
 	free(entry->key);
-	if (hashtableEntryDestroyFunc)
-		hashtableEntryDestroyFunc(entry->data);
+	if (private_hashtableEntryDestroyFunc)
+		private_hashtableEntryDestroyFunc(entry->data);
 	free(entry);
 	return ;
 }
@@ -233,9 +233,9 @@ t_hashtable	*hashtableSet(t_hashtable *table, const char *key, void *data)
 		}
 		return (table);
 	}
-	if (hashtableEntryDupFunc)
+	if (private_hashtableEntryDupFunc)
 	{
-		((t_hashtableEntry *)node->data)->data = hashtableEntryDupFunc(data);
+		((t_hashtableEntry *)node->data)->data = private_hashtableEntryDupFunc(data);
 		if (NULL == ((t_hashtableEntry *)node->data)->data)
 			return (NULL);
 	}
