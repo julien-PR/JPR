@@ -18,8 +18,8 @@
 # endif
 # include "libs/libllist/libllist.h"
 
-typedef void	(*t_hashtableEntryDestroyFn)(void *data);
-typedef void	*(*t_hashtableEntryDupFn)(const void *data);
+typedef void	(*t_hashtableEntryFuncDestroy)(void *data);
+typedef void	*(*t_hashtableEntryFuncDup)(const void *data);
 
 typedef struct s_hashTableEntry
 {
@@ -43,9 +43,6 @@ typedef struct s_hashTable
 	 */
 	t_llist	**data;
 }	t_hashtable;
-
-extern t_hashtableEntryDestroyFn	hashtableEntryDestroyFunc;
-extern t_hashtableEntryDupFn		hashtableEntryDupFunc;
 
 /**
  * @brief Creates a new hash table.
@@ -77,12 +74,30 @@ t_hashtable	*hashtableDup(const t_hashtable *src);
  */
 void	hashtableDestroy(t_hashtable *table);
 
+void	hashtableEntryFuncDestroySet(t_hashtableEntryFuncDestroy fn);
+void	hashtableEntryFuncDupSet(t_hashtableEntryFuncDup fn);
+
 # ifdef LIBHASHTABLE_IMPLEMENTATION
 
 # ifndef LIBSTR_IMPLEMENTATION
 #  define LIBSTR_IMPLEMENTATION
 # endif
 # include "libs/libstr/libstr.h"
+
+t_hashtableEntryFuncDestroy	hashtableEntryDestroyFunc = NULL;
+t_hashtableEntryFuncDup		hashtableEntryDupFunc = NULL;
+
+void	hashtableEntryFuncDestroySet(t_hashtableEntryFuncDestroy fn)
+{
+	hashtableEntryDestroyFunc = fn;
+	return ;
+}
+
+void	hashtableEntryFuncDupSet(t_hashtableEntryFuncDup fn)
+{
+	hashtableEntryDupFunc = fn;
+	return ;
+}
 
 static size_t	private_hashTableHash(const char *key)
 {
