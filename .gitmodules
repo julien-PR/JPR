@@ -5,3 +5,7 @@
 [submodule "libs/libllist"]
 	path = libs/libllist
 	url = https://github.com/julienPR86/libllist.git
+
+[submodule "libs/libmem"]
+	path = libs/libmem
+	url = https://github.com/julienPR86/libmem.git
