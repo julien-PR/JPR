@@ -84,6 +84,11 @@ void	hashtableEntryFuncDupSet(t_hashtableEntryFuncDup fn);
 # endif
 # include "libs/libstr/libstr.h"
 
+# ifndef LIBMEM_IMPLEMENTATION
+#  define LIBMEM_IMPLEMENTATION
+# endif
+# include "libs/libmem/libmem.h"
+
 t_hashtableEntryFuncDestroy	private_hashtableEntryDestroyFunc = NULL;
 t_hashtableEntryFuncDup		private_hashtableEntryDupFunc = NULL;
 
