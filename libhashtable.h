@@ -206,7 +206,7 @@ t_hashtable	*hashtableSet(t_hashtable *table, const char *key, void *data)
 			free(entry);
 			return (NULL);
 		}
-		strMemSet(table->data + table->capacity, 0, (hashv + 1 - table->capacity) * sizeof(t_llist *));
+		memSet(table->data + table->capacity, 0, (hashv + 1 - table->capacity) * sizeof(t_llist *));
 		table->bsize = (hashv + 1) * sizeof(t_llist *);
 		table->capacity = hashv + 1;
 		if (NULL == llistPushBack(table->data + hashv, llistNew(entry)))
