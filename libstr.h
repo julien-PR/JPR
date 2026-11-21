@@ -210,7 +210,7 @@ char	*strTrimRightUntilIsDelim(const char *s, int (*isdelimFn)(int c));
 char	*strSub(const char *s, size_t start, size_t length);
 
 /**
- * @brief Replaces every occurence of @a old_s with @a new_s in @a s.
+ * @brief Replaces every occurrence of @a old_s with @a new_s in @a s.
  * @param s A pointer to the allocated string to modify.
  * @return A pointer to the resulting string, or NULL on failure.
  */
