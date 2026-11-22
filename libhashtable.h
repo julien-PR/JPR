@@ -71,7 +71,11 @@ void	hashtableDestroy(t_hashtable *table);
 void	hashtableEntryFuncDestroySet(t_hashtableEntryFuncDestroy fn);
 void	hashtableEntryFuncDupSet(t_hashtableEntryFuncDup fn);
 
-# ifdef LIBHASHTABLE_IMPLEMENTATION
+#endif // LIBHASHTABLE_H
+
+#ifdef LIBHASHTABLE_IMPLEMENTATION
+# ifndef LIBHASHTABLE_IMPLEMENTATION_DONE
+#  define LIBHASHTABLE_IMPLEMENTATION_DONE
 
 # include "libstr.h"
 # include "libmem.h"
@@ -295,6 +299,6 @@ void	hashtableDestroy(t_hashtable *table)
 	return ;
 }
 
-# endif // LIBHASHTABLE_IMPLEMENTATION
+# endif // LIBHASHTABLE_IMPLEMENTATION_DONE
 
-#endif // LIBHASHTABLE_H
+#endif // LIBHASHTABLE_IMPLEMENTATION
