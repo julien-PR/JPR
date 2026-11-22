@@ -51,7 +51,11 @@ void	*memCopy(void *dst, const void *src, size_t n);
  */
 void	*memMove(void *dst, const void *src, size_t n);
 
-# ifdef	JPR_LIBMEM_IMPLEMENTATION
+#endif // JPR_LIBMEM_H
+
+#ifdef JPR_LIBMEM_IMPLEMENTATION
+# ifndef JPR_LIBMEM_IMPLEMENTATION_DONE
+#  define JPR_LIBMEM_IMPLEMENTATION_DONE
 
 void	*memSet(void *s, int c, size_t n)
 {
@@ -143,6 +147,6 @@ void	*memMove(void *dst, const void *src, size_t n)
 	return (dst);	
 }
 
-# endif // JPR_LIBMEM_IMPLEMENTATION
+# endif // JPR_LIBMEM_IMPLEMENTATION_DONE
 
-#endif // JPR_LIBMEM_H
+#endif // JPR_LIBMEM_IMPLEMENTATION

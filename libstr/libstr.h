@@ -269,7 +269,11 @@ size_t	strCountWords(const char *s, const char *set);
  */
 void	strDestroy(char **strs);
 
-# ifdef	JPR_LIBSTR_IMPLEMENTATION
+#endif // JPR_LIBSTR_H
+
+#ifdef JPR_LIBSTR_IMPLEMENTATION
+# ifndef JPR_LIBSTR_IMPLEMENTATION_DONE
+#  define JPR_LIBSTR_IMPLEMENTATION_DONE
 
 size_t	strLength(const char *s)
 {
@@ -1094,6 +1098,6 @@ void	strDestroy(char **strs)
 	return ;
 }
 
-# endif // JPR_LIBSTR_IMPLEMENTATION
+# endif //JPR_LIBSTR_IMPLEMENTATION_DONE
 
-#endif // JPR_LIBSTR_H
+#endif // JPR_LIBSTR_IMPLEMENTATION

@@ -85,7 +85,11 @@ t_llist	*llistPop(t_llist **head);
  */
 void	llistDestroy(t_llist **head, t_llistDestroyFn destroy);
 
-# ifdef JPR_LIBLLIST_IMPLEMENTATION
+#endif // JPR_LIBLLIST_H
+
+#ifdef JPR_LIBLLIST_IMPLEMENTATION
+# ifndef JPR_LIBLLIST_IMPLEMENTATION_DONE
+#  define JPR_LIBLLIST_IMPLEMENTATION_DONE
 
 t_llist	*llistNew(void *data)
 {
@@ -229,6 +233,6 @@ void	llistDestroy(t_llist **head, t_llistDestroyFn destroy)
 	return ;
 }
 
-# endif // JPR_LIBLLIST_IMPLEMENTATION
+# endif // JPR_LIBLLIST_IMPLEMENTATION_DONE
 
-#endif // JPR_LIBLLIST_H
+#endif // JPR_LIBLLIST_IMPLEMENTATION
