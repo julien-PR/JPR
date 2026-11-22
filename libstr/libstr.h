@@ -1,0 +1,1099 @@
+/*
+	Do:
+		#define LIBSTR_IMPLEMENTATION 
+	to get access to the lib functions.
+	This should be done only one time !
+*/
+
+
+#ifndef LIBSTR_H
+# define LIBSTR_H
+
+# include <stdlib.h>
+# include <ctype.h>
+# include <stdbool.h>
+# include <limits.h>
+# include <float.h>
+# include <math.h>
+
+/**
+ * @brief Returns the length of @a s.
+ */
+size_t	strLength(const char *s);
+
+/**
+ * @brief Returns @a n if smaller than the length of @a s.
+ */
+size_t	strLengthN(const char *s, size_t n);
+
+/**
+ * @brief Returns a pointer to the end of @a s, the terminating null character.
+ */
+const char	*strEnd(const char *s);
+
+/**
+ * @brief Returns a pointer to the first occurrence of @a c in @a s.
+ * @return A pointer to the occurrence, or NULL if @a c is not found.
+ */
+char	*strFindFirstOfChar(const char *s, char c);
+
+/**
+ * @brief Returns a pointer to the last occurrence of @a c in @a s.
+ * @return A pointer to the occurrence, or NULL if @a c is not found.
+ */
+char	*strFindLastOfChar(const char *s, char c);
+
+/**
+ * @brief Returns a pointer to the first occurrence of any character from @a set in @a s.
+ * @return A pointer to the occurrence, or NULL if no character is found.
+ */
+char	*strFindFirstOf(const char *s, const char *set);
+
+/**
+ * @brief Returns a pointer to the first occurrence of any character from @a s that doesn't appear in @a set.
+ * @return A pointer to the occurrence, or NULL if no character is found.
+ */
+char	*strFindFirstNotOf(const char *s, const char *set);
+
+/**
+ * @brief Returns a pointer to the last occurrence of any character from @a set in @a s.
+ * @return A pointer to the occurrence, or NULL if no character is found.
+ */
+char	*strFindLastOf(const char *s, const char *set);
+
+/**
+ * @brief Returns a pointer to the last occurrence of any character from @a s that doesn't appear in @a set.
+ * @return A pointer to the occurrence, or NULL if no character is found.
+ */
+char	*strFindLastNotOf(const char *s, const char *set);
+
+/**
+ * @brief Returns a pointer to the first occurrence of the substring @a needle in @a s.
+ * @return A pointer to the occurrence, or NULL if @a needle is not found.
+ */
+char	*strFind(const char *s, const char *needle);
+
+/**
+ * @brief Returns a pointer to the first occurrence of the substring @a needle within the first @a n characters of @a s.
+ * @return A pointer to the occurrence, or NULL if @a needle is not found.
+ */
+char	*strFindN(const char *s, const char *needle, size_t n);
+
+/**
+ * @brief Compares the two strings @a s1 and @a s2.
+ * @return A negative value if @a s1 is less than @a s2, a positive value if @a s1 is greater than @a s2, or 0 if they are equal.
+ */
+int	strCompare(const char *s1, const char *s2);
+
+/**
+ * @brief Compares at most the first @a n characters of @a s1 and @a s2.
+ * @return A negative value if @a s1 is less than @a s2, a positive value if @a s1 is greater than @a s2, or 0 if they are equal.
+ */
+int	strCompareN(const char *s1, const char *s2, size_t n);
+
+/**
+ * @brief Copies @a src into @a dst.
+ * @warning @a dst must be large enough to hold @a src and its null terminator.
+ * @return @a dst on success, or NULL on failure.
+ */
+char	*strCopy(char *dst, const char *src);
+
+/**
+ * @brief Copies at most the first @a n characters of @a src into @a dst.
+ * @warning @a dst must be large enough to hold the copied characters and the null terminator.
+ * @return @a dst on success, or NULL on failure.
+ */
+char	*strCopyN(char *dst, const char *src, size_t n);
+
+/**
+ * @brief Concatenates @a src to the end of @a dst.
+ * @warning @a dst must be null-terminated and large enough to hold the result.
+ * @return @a dst on success, or NULL on failure.
+ */
+char	*strConcat(char *dst, const char *src);
+
+/**
+ * @brief Concatenates at most the first @a n characters of @a src to @a dst.
+ * @warning @a dst must be null-terminated and large enough to hold the result.
+ * @return @a dst on success, or NULL on failure.
+ */
+char	*strConcatN(char *dst, const char *src, size_t n);
+
+/**
+ * @brief Returns an allocated copy of @a s.
+ * @return A pointer to the allocated string, or NULL on failure.
+ */
+char	*strDup(const char *s);
+
+/**
+ * @brief Returns an allocated copy of the first @a n characters of @a s.
+ * @return A pointer to the allocated string, or NULL on failure.
+ */
+char	*strDupN(const char *s, size_t n);
+
+/**
+ * @brief Appends @a src to the end of @a dst.
+ * @param dst A pointer to the allocated string to modify.
+ * @return A pointer to the resulting string, or NULL on failure.
+ */
+char	*strAppend(char **dst, const char *src);
+
+/**
+ * @brief Appends at most the first @a n characters of @a src to @a dst.
+ * @param dst A pointer to the allocated string to modify.
+ * @return A pointer to the resulting string, or NULL on failure.
+ */
+char	*strAppendN(char **dst, const char *src, size_t n);
+
+/**
+ * @brief Inserts @a src into @a dst at @a index.
+ * @param dst A pointer to the allocated string to modify.
+ * @return A pointer to the resulting string, or NULL on failure.
+ */
+char	*strInsert(char **dst, const char *src, size_t index);
+
+/**
+ * @brief Joins all strings in @a src, using @a sep as a separator.
+ * @param src An array of strings.
+ * @param sep The separator to insert between strings.
+ * @warning @a src must end with a NULL pointer to indicate the end of the array.
+ * @return The allocated joined string, or NULL on failure.
+ */
+char	*strJoin(const char *const *src, const char *sep);
+
+/**
+ * @brief Splits @a src whenever a character from @a set is found.
+ * @return An allocated array of strings, or NULL on failure.
+ */
+char	**strSplit(const char *src, const char *set);
+
+/**
+ * @brief Removes leading characters from @a s that belong to @a set.
+ * @return The allocated trimmed string, or NULL on failure.
+ */
+char	*strTrimLeft(const char *s, const char *set);
+
+/**
+ * @brief Removes trailing characters from @a s that belong to @a set.
+ * @return The allocated trimmed string, or NULL on failure.
+ */
+char	*strTrimRight(const char *s, const char *set);
+
+/**
+ * @brief Removes leading characters from @a s until any characters from @a set is found.
+ * @return The allocated trimmed string, or NULL on failure.
+ */
+char	*strTrimLeftUntil(const char *s, const char *set);
+
+/**
+ * @brief Removes trailing characters from @a s until any characters from @a set is found.
+ * @return The allocated trimmed string, or NULL on failure.
+ */
+char	*strTrimRightUntil(const char *s, const char *set);
+
+/**
+ * @brief Removes leading characters from @a s until @a isdelimFn returns a non-zero value.
+ * @return The allocated trimmed string, or NULL on failure.
+ */
+char	*strTrimLeftUntilIsDelim(const char *s, int (*isdelimFn)(int c));
+
+/**
+ * @brief Removes trailing characters from @a s until @a isdelimFn returns a non-zero value.
+ * @return The allocated trimmed string, or NULL on failure.
+ */
+char	*strTrimRightUntilIsDelim(const char *s, int (*isdelimFn)(int c));
+
+/**
+ * @brief Returns the substring of @a s from @a start to @a start + @a length characters.
+ * @return The allocated substring, or NULL on failure.
+ */
+char	*strSub(const char *s, size_t start, size_t length);
+
+/**
+ * @brief Replaces every occurrence of @a old_s with @a new_s in @a s.
+ * @param s A pointer to the allocated string to modify.
+ * @return A pointer to the resulting string, or NULL on failure.
+ */
+char	*strReplace(char **s, const char *old_s, const char *new_s);
+
+/**
+ * @brief Converts the initial portion of @a s to an integer.
+ * @return The converted integer on success, 0 if the conversion is impossible.
+ */
+int		strToInt(const char *s);
+
+/**
+ * @brief Converts the initial portion of @a s to an unsigned integer.
+ * @return The converted unsigned integer on success, 0 if the conversion is impossible.
+ */
+unsigned	strToUnsigned(const char *s);
+
+/**
+ * @brief Converts the initial portion of @a s to a long integer.
+ * @return The converted long integer on success, 0 if the conversion is impossible.
+ */
+long	strToLong(const char *s);
+
+/**
+ * @brief Converts the initial portion of @a s to an unsigned long integer.
+ * @return The converted unsigned long integer on success, 0 if the conversion is impossible.
+ */
+unsigned long	strToUnsignedLong(const char *s);
+
+/**
+ * @brief Converts the initial portion of @a s to a double.
+ * @return The converted double on success, 0 if the conversion is impossible.
+ */
+double	strToDouble(const char *s, char **endptr);
+
+/**
+ * @brief Converts all lower case characters from @a s to upper case characters.
+ */
+char	*strToUpper(char *s);
+
+/**
+ * @brief Converts all upper case characters from @a s to lower case characters.
+ */
+char	*strToLower(char *s);
+
+/**
+ * @brief Returns the number of words in @a s.
+ *
+ * A word is separated by one or more characters from @a set.
+ */
+size_t	strCountWords(const char *s, const char *set);
+
+/**
+ * @brief Frees an array of strings.
+ * @warning @a s must end with a NULL pointer to indicate the end of the array.
+ */
+void	strDestroy(char **strs);
+
+# ifdef	LIBSTR_IMPLEMENTATION
+
+size_t	strLength(const char *s)
+{
+	size_t	size;
+
+	if (NULL == s)
+		return (0);
+	size = 0;
+	while (*(s + size))
+		++size;
+	return (size);
+}
+
+size_t	strLengthN(const char *s, size_t n)
+{
+	size_t	size;
+
+	if (NULL == s || 0 == n)
+		return (0);
+	size = 0;
+	while (*(s + size) && size < n)
+		++size;
+	return (size);
+}
+
+const char	*strEnd(const char *s)
+{
+	if (NULL == s)
+		return (NULL);
+	return (s + strLength(s));
+}
+
+char	*strFindFirstOfChar(const char *s, char c)
+{
+	if (NULL == s)
+		return (NULL);
+	while (*s && *s != c)
+		++s;
+	if ('\0' == *s && '\0' != c)
+		return (NULL);
+	return ((char *)s);
+}
+
+char	*strFindLastOfChar(const char *s, char c)
+{
+	char	*last = NULL;
+
+	if (NULL == s)
+		return (NULL);
+	while (*s)
+	{
+		if (*s == c)
+			last = (char *)s;
+		++s;
+	}
+	if ('\0' == c)
+		return ((char *)s);
+	return (last);
+}
+
+char	*strFindFirstOf(const char *s, const char *set)
+{
+	if (NULL == s || NULL == set)
+		return (NULL);
+	while (*s && !strFindFirstOfChar(set, *s))
+		++s;
+	if ('\0' == *s)
+		return (NULL);
+	return ((char *)s);
+}
+
+char	*strFindFirstNotOf(const char *s, const char *set)
+{
+	if (NULL == s || NULL == set)
+		return (NULL);
+	while (*s && strFindFirstOfChar(set, *s))
+		++s;
+	if ('\0' == *s)
+		return (NULL);
+	return ((char *)s);
+}
+
+char	*strFindLastOf(const char *s, const char *set)
+{
+	char	*last = NULL;
+
+	if (NULL == s)
+		return (NULL);
+	while (*s)
+	{
+		if (strFindFirstOfChar(set, *s))
+			last = (char *)s;
+		++s;
+	}
+	return (last);
+}
+
+char	*strFindLastNotOf(const char *s, const char *set)
+{
+	char	*last = NULL;
+
+	if (NULL == s)
+		return (NULL);
+	while (*s)
+	{
+		if (!strFindFirstOfChar(set, *s))
+			last = (char *)s;
+		++s;
+	}
+	return (last);
+}
+
+char	*strFind(const char *s, const char *needle)
+{
+	size_t	needle_size;
+	char	*occ;
+
+	if (NULL == s || NULL == needle)
+		return (NULL);
+	needle_size = strLength(needle);
+	occ = strFindFirstOfChar(s, *needle);
+	while (occ)
+	{
+		if (0 == strCompareN(occ, needle, needle_size))
+			return (occ);
+		occ = strFindFirstOfChar(occ + 1, *needle);
+	}
+	return (NULL);
+}
+
+char	*strFindN(const char *s, const char *needle, size_t n)
+{
+	size_t	needle_size;
+	char	*occ;
+
+	if (NULL == s || NULL == needle || 0 == n)
+		return (NULL);
+	needle_size = strLengthN(needle, n);
+	occ = strFindFirstOfChar(s, *needle);
+	while (occ)
+	{
+		if (0 == strCompareN(occ, needle, needle_size))
+			return (occ);
+		occ = strFindFirstOfChar(occ + 1, *needle);
+		if (occ - s + needle_size > n)
+			return (NULL);
+	}
+	return (NULL);
+}
+
+int	strCompare(const char *s1, const char *s2)
+{
+	size_t	index = 0;
+
+	if (NULL == s1 && NULL == s2)
+		return (0);
+	if (NULL == s1)
+		return (-*s2);
+	if (NULL == s2)
+		return (*s1);
+	while (*(s1 + index) && *(s2 + index) && *(s1 + index) == *(s2 + index))
+		++index;
+	return (*(s1 + index) - *(s2 + index));
+}
+
+int	strCompareN(const char *s1, const char *s2, size_t n)
+{
+	size_t	index = 0;
+
+	if ((NULL == s1 && NULL == s2) || 0 == n)
+		return (0);
+	if (NULL == s1)
+		return (-*s2);
+	if (NULL == s2)
+		return (*s1);
+	while (*(s1 + index) && *(s2 + index) && *(s1 + index) == *(s2 + index) && index < n - 1)
+		++index;
+	return (*(s1 + index) - *(s2 + index));
+}
+
+char	*strCopy(char *dst, const char *src)
+{
+	size_t	index;
+
+	if (NULL == dst || NULL == src)
+		return (NULL);
+	index = 0;
+	while (*(src + index))
+	{
+		*(dst + index) = *(src + index);
+		++index;
+	}
+	*(dst + index) = *(src + index);
+	return (dst);
+}
+
+char	*strCopyN(char *dst, const char *src, size_t n)
+{
+	size_t	index;
+
+	if (NULL == dst || NULL == src)
+		return (NULL);
+	index = 0;
+	while (*(src + index) && index < n)
+	{
+		*(dst + index) = *(src + index);
+		++index;
+	}
+	*(dst + index) = '\0';
+	return (dst);
+}
+
+char	*strConcat(char *dst, const char *src)
+{
+	size_t	end;
+
+	if (NULL == dst)
+		return (NULL);
+	if (NULL == src)
+		return (dst);
+	end = strLength(dst);
+	strCopy(dst + end, src);
+	return (dst);
+}
+
+char	*strConcatN(char *dst, const char *src, size_t n)
+{
+	size_t	end;
+
+	if (NULL == dst)
+		return (NULL);
+	if (NULL == src || 0 == n)
+		return (dst);
+	end = strLength(dst);
+	strCopyN(dst + end, src, n);
+	return (dst);
+}
+
+char	*strDup(const char *s)
+{
+	size_t	size;
+	char	*dup;
+
+	if (NULL == s)
+		return (NULL);
+	size = strLength(s);
+	dup = malloc(sizeof(char) * (size + 1));
+	if (NULL == dup)
+		return (NULL);
+	strCopy(dup, s);
+	return (dup);
+}
+
+char	*strDupN(const char *s, size_t n)
+{
+	size_t	size;
+	char	*dup;
+
+	if (NULL == s)
+		return (NULL);
+	size = strLengthN(s, n);
+	dup = malloc(sizeof(char) * (size + 1));
+	if (NULL == dup)
+		return (NULL);
+	strCopyN(dup, s, n);
+	return (dup);
+}
+
+char	*strAppend(char **dst, const char *src)
+{
+	size_t	dst_size;
+	size_t	src_size;
+	char	*concat;
+
+	if (NULL == dst)
+		return (NULL);
+	if (NULL == src)
+		return (*dst);
+	if (NULL == *dst)
+	{
+		*dst = strDup(src);
+		return (*dst);
+	}
+	dst_size = strLength(*dst);
+	src_size = strLength(src);
+	if (0 == src_size)
+		return ((char *)(*dst));
+	concat = malloc(sizeof(char) * (dst_size + src_size + 1));
+	if (NULL == concat)
+		return (NULL);
+	strCopy(concat, *dst);
+	strConcat(concat, src);
+	free(*dst);
+	*dst = concat;
+	return (*dst);
+}
+
+char	*strAppendN(char **dst, const char *src, size_t n)
+{
+	size_t	dst_size;
+	size_t	src_size;
+	char	*concat;
+
+	if (NULL == dst)
+		return (NULL);
+	if (NULL == src || 0 == n)
+		return (*dst);
+	if (NULL == *dst)
+	{
+		*dst = strDupN(src, n);
+		return (*dst);
+	}
+	dst_size = strLength(*dst);
+	src_size = strLengthN(src, n);
+	if (0 == src_size)
+		return ((char *)(*dst));
+	concat = malloc(sizeof(char) * (dst_size + src_size + 1));
+	if (NULL == concat)
+		return (NULL);
+	strCopy(concat, *dst);
+	strConcatN(concat, src, n);
+	free(*dst);
+	*dst = concat;
+	return (*dst);
+}
+
+char	*strInsert(char **dst, const char *src, size_t index)
+{
+	char	*insert;
+	size_t	src_size;
+	size_t	dst_size;
+
+	if (NULL == dst)
+		return (NULL);
+	dst_size = strLength(*dst);
+	if (NULL == src || index > dst_size)
+		return (*dst);
+	src_size = strLength(src);
+	insert = calloc(dst_size + src_size + 1, sizeof(char));
+	if (NULL == insert)
+		return (NULL);
+	strCopyN(insert, *dst, index);
+	strConcat(insert, src);
+	strConcat(insert, (*dst) + index);
+	free(*dst);
+	*dst = insert;
+	return (*dst);
+}
+
+char	*strJoin(const char *const *s, const char *sep)
+{
+	size_t	index = 0;
+	char	*join = NULL;
+	char	*tmp;
+
+	if (NULL == s || NULL == *s)
+		return (NULL);
+	while (*(s + index))
+	{
+		tmp = strAppend(&join, *(s + index));
+		if (NULL == tmp)
+		{
+			free(join);
+			return (NULL);
+		}
+		join = tmp;
+		if (*(s + index + 1))
+		{
+			tmp = strAppend(&join, sep);
+			if (NULL == tmp)
+			{
+				free(join);
+				return (NULL);
+			}
+			join = tmp;
+		}
+		++index;
+	}
+	return (join);
+}
+
+char	**strSplit(const char *str, const char *set)
+{
+	char	**arr;
+	size_t	wc;
+	size_t	start_index;
+	size_t	end_index;
+	size_t	counter;
+
+	if (NULL == str || NULL == set)
+		return (NULL);
+	wc = strCountWords(str, set);
+	arr = (char **)malloc(sizeof(char *) * (wc + 1));
+	if (NULL == arr)
+		return (NULL);
+	counter = 0;
+	end_index = 0;
+	while (counter < wc)
+	{
+		start_index = end_index;
+		while (*(str + start_index) && strFindFirstOfChar(set, *(str + start_index)))
+			start_index++;
+		end_index = start_index;
+		while (*(str + end_index) && !strFindFirstOfChar(set, *(str + end_index)))
+			end_index++;
+		*(arr + counter) = strDupN(str + start_index, end_index - start_index);
+		if (NULL == *(arr + counter))
+		{
+			strDestroy(arr);
+			return (NULL);
+		}
+		counter++;
+	}
+	*(arr + counter) = NULL;
+	return (arr);
+}
+
+char	*strTrimLeft(const char *s, const char *set)
+{
+	char	*trimmed;
+
+	if (NULL == s )
+		return (NULL);
+	if (NULL == set)
+		return (strDup(s));
+	while (*s && strFindFirstOfChar(set, *s))
+		++s;
+	trimmed = strDup(s);
+	return (trimmed);
+}
+
+char	*strTrimRight(const char *s, const char *set)
+{
+	const char	*end = strEnd(s);
+	char		*trimmed;
+
+	if (NULL == s)
+		return (NULL);
+	if (NULL == set)
+		return (strDup(s));
+	while (end >= s && strFindFirstOfChar(set, *end))
+		--end;
+	trimmed = strDupN(s, end - s + 1);
+	return (trimmed);
+}
+
+char	*strTrimLeftUntil(const char *s, const char *set)
+{
+	char	*trimmed;
+
+	if (NULL == s)
+		return (NULL);
+	if (NULL == set)
+		return (strDup(s));
+	while (*s && !strFindFirstOfChar(set, *s))
+		++s;
+	trimmed = strDup(s);
+	return (trimmed);
+}
+
+char	*strTrimRightUntil(const char *s, const char *set)
+{
+	const char	*end = strEnd(s) - 1;
+	char		*trimmed;
+
+	if (NULL == s)
+		return (NULL);
+	if (NULL == set)
+		return (strDup(s));
+	while (end >= s && !strFindFirstOfChar(set, *end))
+		--end;
+	trimmed = strDupN(s, end - s + 1);
+	return (trimmed);
+}
+
+char	*strTrimLeftUntilIsDelim(const char *s, int (*isdelimFn)(int c))
+{
+	char	*trimmed;
+
+	if (NULL == s)
+		return (NULL);
+	if (NULL == isdelimFn)
+		return (strDup(s));
+	while (*s && !isdelimFn(*s))
+		++s;
+	trimmed = strDup(s);
+	return (trimmed);
+}
+
+char	*strTrimRightUntilIsDelim(const char *s, int (*isdelimFn)(int c))
+{
+	const char	*end = strEnd(s) - 1;
+	char		*trimmed;
+
+	if (NULL == s)
+		return (NULL);
+	if (NULL == isdelimFn)
+		return (strDup(s));
+	while (end >= s && !isdelimFn(*end))
+		--end;
+	trimmed = strDupN(s, end - s + 1);
+	return (trimmed);
+}
+
+char	*strSub(const char *s, size_t start, size_t length)
+{
+	const size_t	slen = strLength(s);
+	size_t			size = 0;
+	char			*sub;
+
+	if (NULL == s || start > slen)
+		return (NULL);
+	size = length > slen ? slen : length;
+	sub = malloc((size + 1) * sizeof(char));
+	if (NULL == sub)
+		return (NULL);
+	strCopyN(sub, s + start, size);
+	return (sub);
+}
+
+char	*strReplace(char **s, const char *old_s, const char *new_s)
+{
+	char	*sptr = *s;
+	char	*find = NULL;
+	char	*replaced = NULL;
+
+	if (NULL == s || NULL == *s)
+		return (NULL);
+	if (NULL == old_s)
+		return (*s);
+	while ((find = strFind(sptr, old_s)))
+	{
+		if (NULL == strAppendN(&replaced, sptr, find - sptr) && NULL != replaced)
+		{
+			free(replaced);
+			return (NULL);
+		}
+		if (NULL == strAppend(&replaced, new_s))
+		{
+			free(replaced);
+			return (NULL);
+		}
+		sptr = find + strLength(old_s);
+	}
+	if (NULL == strAppend(&replaced, sptr))
+	{
+		free(replaced);
+		return (NULL);
+	}
+	free(*s);
+	*s = replaced;
+	return (*s);
+}
+
+int	strToInt(const char *s)
+{
+	int		n = 0;
+	bool	negative = false;
+
+	if (NULL == s)
+		return (0);
+	while (isspace(*s))
+		++s;
+	if ('-' == *s || '+' == *s)
+	{
+		if ('-' == *s)
+			negative = true;
+		++s;
+	}
+	while (isdigit(*s))
+	{
+		if ((negative ? -n : n) > (INT_MAX - (*s - '0')) / 10)
+			return (INT_MAX);
+		if ((negative ? -n : n) < (INT_MIN + *s - '0') / 10)
+			return (INT_MIN);
+		n = n * 10 + *s - '0';
+		++s;
+	}
+	return (negative ? -n : n);
+}
+
+unsigned int	strToUnsigned(const char *s)
+{
+	unsigned int	n = 0;
+	bool			negative = false;
+
+	if (NULL == s)
+		return (0);
+	while (isspace(*s))
+		++s;
+	if ('-' == *s || '+' == *s)
+	{
+		if ('-' == *s)
+			negative = true;
+		++s;
+	}
+	while (isdigit(*s))
+	{
+		if (n > (UINT_MAX - (*s - '0')) / 10)
+			return (UINT_MAX);
+		n = n * 10 + *s - '0';
+		++s;
+	}
+	return (negative ? -n : n);
+}
+
+long	strToLong(const char *s)
+{
+	long	n = 0;
+	bool	negative = false;
+
+	if (NULL == s)
+		return (0);
+	while (isspace(*s))
+		++s;
+	if ('-' == *s || '+' == *s)
+	{
+		if ('-' == *s)
+			negative = true;
+		++s;
+	}
+	while (isdigit(*s))
+	{
+		if ((negative ? -n : n) > (LONG_MAX - (*s - '0')) / 10)
+			return (LONG_MAX);
+		if ((negative ? -n : n) < (LONG_MIN + *s - '0') / 10)
+			return (LONG_MIN);
+		n = n * 10 + *s - '0';
+		++s;
+	}
+	return (negative ? -n : n);
+}
+
+unsigned long	strToUnsignedLong(const char *s)
+{
+	unsigned long	n = 0;
+	bool			negative = false;
+
+	if (NULL == s)
+		return (0);
+	while (isspace(*s))
+		++s;
+	if ('-' == *s || '+' == *s)
+	{
+		if ('-' == *s)
+			negative = true;
+		++s;
+	}
+	while (isdigit(*s))
+	{
+		if (n > (ULONG_MAX - (*s - '0')) / 10)
+			return (ULONG_MAX);
+		n = n * 10 + *s - '0';
+		++s;
+	}
+	return (negative ? -n : n);
+}
+
+double	strToDouble(const char *s, char **endptr)
+{
+	double	num = 0.0;
+	double	precision = 10.0;
+	int		exponent = 0;
+	bool	negative = false;
+
+	if (NULL == s)
+		return (0);
+	while (isspace(*s))
+		++s;
+	if ('-' == *s || '+' == *s)
+	{
+		if ('-' == *s)
+			negative = true;
+		++s;
+	}
+	while (isdigit(*s))
+	{
+		if (num > (DBL_MAX - (*s - '0')) * 0.1)
+		{
+			if (endptr)
+				*endptr = (char *)s;
+			return (negative ? -HUGE_VAL : HUGE_VAL);
+		}
+		num = num * 10 + *s - '0';
+		++s;
+	}
+	if ('.' == *s)
+		++s;
+	while (isdigit(*s))
+	{
+		num += (*s - '0') / precision;
+		precision *= 10;
+		++s;
+	}
+	if ('e' == tolower(*s))
+	{
+		const char	*exp = ++s;
+		bool		neg_exp = false;
+
+		if ('-' == *s || '+' == *s)
+		{
+			if ('-' == *s)
+				neg_exp = true;
+			++s;
+		}
+		while (isdigit(*s))
+			++s;
+		exponent = strToInt(exp);
+		if (0 == exponent)
+		{
+			if (endptr)
+				*endptr = (char *)exp - 1;
+			return (negative ? -num : num);
+		}
+		if (exponent > 308 || exponent < -308)
+		{
+			if (endptr)
+				*endptr = (char *)s;
+			return (neg_exp ? (negative ? -0.0 : 0.0) : (negative ? -HUGE_VAL : HUGE_VAL));
+		}
+		while (exponent)
+		{
+			num = num * (exponent > 0 ? 10 : 0.1);
+			exponent += (exponent > 0 ? -1 : 1);
+		}
+	}
+	if ('i' == tolower(*s)
+		&& 'n' == tolower(*(s+1))
+		&& 'f' == tolower(*(s+2)))
+	{
+		s += 3;
+		if ('i' == tolower(*s)
+			&& 'n' == tolower(*(s+1))
+			&& 'i' == tolower(*(s+2))
+			&& 't' == tolower(*(s+3))
+			&& 'y' == tolower(*(s+4)))
+			s += 5;
+		num = HUGE_VAL;
+	}
+	else if ('n' == tolower(*s)
+			&& 'a' == tolower(*(s+1))
+			&& 'n' == tolower(*(s+2)))
+	{
+		s += 3;
+		if (*s == '(')
+		{
+			const char *tmp = s + 1;
+
+			while (isalnum(*tmp))
+				++tmp;
+			if (*tmp == ')')
+				s = tmp + 1;
+		}
+		num = NAN;
+	}
+	if (endptr)
+		*endptr = (char *)s;
+	return (negative ? -num : num);
+}
+
+char	*strToUpper(char *s)
+{
+	size_t	index = 0;
+
+	while (*(s + index))
+	{
+		*(s + index) = toupper(*(s + index));
+		++index;
+	}
+	return (s);
+}
+
+char	*strToLower(char *s)
+{
+	size_t	index = 0;
+
+	while (*(s + index))
+	{
+		*(s + index) = tolower(*(s + index));
+		++index;
+	}
+	return (s);
+}
+
+size_t	strCountWords(const char *s, const char *set)
+{
+	size_t	count = 0;
+	bool	is_word = true;
+
+	if (NULL == s || NULL == set)
+		return (0);
+	while (*s)
+	{
+		if (strFindFirstOfChar(set, *s))
+			is_word = true;
+		else if (is_word)
+		{
+			count++;
+			is_word = false;
+		}
+		++s;
+	}
+	return (count);
+}
+
+void	strDestroy(char **strs)
+{
+	size_t	index;
+
+	if (NULL == strs)
+		return ;
+	index = 0;
+	while (*(strs + index))
+	{
+		free(*(strs + index));
+		*(strs + index) = NULL;
+		++index;
+	}
+	free(*(strs + index));
+	*(strs + index) = NULL;
+	free(strs);
+	return ;
+}
+
+# endif // LIBSTR_IMPLEMENTATION
+
+#endif // LIBSTR_H
