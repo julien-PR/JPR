@@ -781,14 +781,19 @@ char	*strTrimRightUntilIsDelim(const char *s, int (*isdelimFn)(int c))
 
 char	*strSub(const char *s, size_t start, size_t length)
 {
-	const size_t	slen = strLength(s);
-	size_t			size = 0;
-	char			*sub;
+	size_t	slen;
+	size_t	size;
+	char	*sub;
 
-	if (NULL == s || start > slen)
+	if (NULL == s)
 		return (NULL);
-	size = length > slen ? slen : length;
-	sub = malloc((size + 1) * sizeof(char));
+	slen = strLength(s);
+	if (start > slen)
+		return (NULL);
+	size = slen - start;
+	if (length < size)
+		size = length;
+	sub = malloc(sizeof(char) * (size + 1));
 	if (NULL == sub)
 		return (NULL);
 	strCopyN(sub, s + start, size);
