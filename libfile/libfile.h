@@ -22,6 +22,8 @@ char	*fileReadLine(int fd);
 
 char	*fileRead(const char *path);
 
+char	*fileReadFd(int fd);
+
 #endif // JPR_LIBFILE_H
 
 #ifdef JPR_LIBFILE_IMPLEMENTATION
@@ -109,6 +111,28 @@ char	*fileRead(const char *path)
 		line = fileReadLine(fd);
 	}
 	close(fd);
+	return (data);
+}
+
+char	*fileReadFd(int fd)
+{
+	char	*data = NULL;
+	char	*line;
+
+	if (fd < 0)
+		return (NULL);
+	line = fileReadLine(fd);
+	while (line)
+	{
+		if (NULL == strAppend(&data, line))
+		{
+			free(line);
+			free(data);
+			return (NULL);
+		}
+		free(line);
+		line = fileReadLine(fd);
+	}
 	return (data);
 }
 
