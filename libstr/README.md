@@ -9,7 +9,7 @@ This is a simple string library that i use in my personal projects.
 To use this lib, you can add the header in the necessary files, and add `#define LIBSTR_IMPLEMENTATION` in **only one** of them to get access to the function definitions.
 
 It should look something like:
-```
+```C
 #define LIBSTR_IMPLEMENTATION
 #include "libstr.h"
 ```
