@@ -711,17 +711,16 @@ char	*strTrimLeft(const char *s, const char *set)
 
 char	*strTrimRight(const char *s, const char *set)
 {
-	const char	*end = strEnd(s);
-	char		*trimmed;
+	size_t	len;
 
 	if (NULL == s)
 		return (NULL);
 	if (NULL == set)
 		return (strDup(s));
-	while (end >= s && strFindFirstOfChar(set, *end))
-		--end;
-	trimmed = strDupN(s, end - s + 1);
-	return (trimmed);
+	len = strLength(s);
+	while (len > 0 && strFindFirstOfChar(set, *(s + len - 1)))
+		--len;
+	return (strDupN(s, len));
 }
 
 char	*strTrimLeftUntil(const char *s, const char *set)
@@ -740,17 +739,16 @@ char	*strTrimLeftUntil(const char *s, const char *set)
 
 char	*strTrimRightUntil(const char *s, const char *set)
 {
-	const char	*end = strEnd(s) - 1;
-	char		*trimmed;
+	size_t	len;
 
 	if (NULL == s)
 		return (NULL);
 	if (NULL == set)
 		return (strDup(s));
-	while (end >= s && !strFindFirstOfChar(set, *end))
-		--end;
-	trimmed = strDupN(s, end - s + 1);
-	return (trimmed);
+	len = strLength(s);
+	while (len > 0 && !strFindFirstOfChar(set, *(s + len - 1)))
+		--len;
+	return (strDupN(s, len));
 }
 
 char	*strTrimLeftUntilIsDelim(const char *s, int (*isdelimFn)(int c))
@@ -769,17 +767,16 @@ char	*strTrimLeftUntilIsDelim(const char *s, int (*isdelimFn)(int c))
 
 char	*strTrimRightUntilIsDelim(const char *s, int (*isdelimFn)(int c))
 {
-	const char	*end = strEnd(s) - 1;
-	char		*trimmed;
+	size_t	len;
 
 	if (NULL == s)
 		return (NULL);
 	if (NULL == isdelimFn)
 		return (strDup(s));
-	while (end >= s && !isdelimFn(*end))
-		--end;
-	trimmed = strDupN(s, end - s + 1);
-	return (trimmed);
+	len = strLength(s);
+	while (len > 0 && !isdelimFn(*(s + len - 1)))
+		--len;
+	return (strDupN(s, len));
 }
 
 char	*strSub(const char *s, size_t start, size_t length)
