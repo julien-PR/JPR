@@ -796,14 +796,15 @@ char	*strSub(const char *s, size_t start, size_t length)
 
 char	*strReplace(char **s, const char *old_s, const char *new_s)
 {
-	char	*sptr = *s;
+	char	*sptr;
 	char	*find = NULL;
 	char	*replaced = NULL;
 
 	if (NULL == s || NULL == *s)
 		return (NULL);
-	if (NULL == old_s)
+	if (NULL == old_s || '\0' == *old_s)
 		return (*s);
+	sptr = *s;
 	while ((find = strFind(sptr, old_s)))
 	{
 		if (NULL == strAppendN(&replaced, sptr, find - sptr) && NULL != replaced)
