@@ -6,8 +6,8 @@
 */
 
 
-#ifndef LIBMEM_H
-# define LIBMEM_H
+#ifndef JPR_LIBMEM_H
+# define JPR_LIBMEM_H
 
 # include <stdlib.h>
 # include <ctype.h>
@@ -51,7 +51,7 @@ void	*memCopy(void *dst, const void *src, size_t n);
  */
 void	*memMove(void *dst, const void *src, size_t n);
 
-# ifdef	LIBMEM_IMPLEMENTATION
+# ifdef	JPR_LIBMEM_IMPLEMENTATION
 
 void	*memSet(void *s, int c, size_t n)
 {
@@ -143,6 +143,6 @@ void	*memMove(void *dst, const void *src, size_t n)
 	return (dst);	
 }
 
-# endif // LIBMEM_IMPLEMENTATION
+# endif // JPR_LIBMEM_IMPLEMENTATION
 
-#endif // LIBMEM_H
+#endif // JPR_LIBMEM_H

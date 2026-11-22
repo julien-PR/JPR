@@ -6,8 +6,8 @@
 */
 
 
-#ifndef LIBSTR_H
-# define LIBSTR_H
+#ifndef JPR_LIBSTR_H
+# define JPR_LIBSTR_H
 
 # include <stdlib.h>
 # include <ctype.h>
@@ -269,7 +269,7 @@ size_t	strCountWords(const char *s, const char *set);
  */
 void	strDestroy(char **strs);
 
-# ifdef	LIBSTR_IMPLEMENTATION
+# ifdef	JPR_LIBSTR_IMPLEMENTATION
 
 size_t	strLength(const char *s)
 {
@@ -1094,6 +1094,6 @@ void	strDestroy(char **strs)
 	return ;
 }
 
-# endif // LIBSTR_IMPLEMENTATION
+# endif // JPR_LIBSTR_IMPLEMENTATION
 
-#endif // LIBSTR_H
+#endif // JPR_LIBSTR_H

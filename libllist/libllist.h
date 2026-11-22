@@ -5,8 +5,8 @@
 	This should be done only one time !
 */
 
-#ifndef LIBLLIST_H
-# define LIBLLIST_H
+#ifndef JPR_LIBLLIST_H
+# define JPR_LIBLLIST_H
 
 # include <stdlib.h>
 
@@ -85,7 +85,7 @@ t_llist	*llistPop(t_llist **head);
  */
 void	llistDestroy(t_llist **head, t_llistDestroyFn destroy);
 
-# ifdef LIBLLIST_IMPLEMENTATION
+# ifdef JPR_LIBLLIST_IMPLEMENTATION
 
 t_llist	*llistNew(void *data)
 {
@@ -229,6 +229,6 @@ void	llistDestroy(t_llist **head, t_llistDestroyFn destroy)
 	return ;
 }
 
-# endif //LIBLLIST_IMPLEMENTATION
+# endif // JPR_LIBLLIST_IMPLEMENTATION
 
-#endif //LIBLLIST_H
+#endif // JPR_LIBLLIST_H
