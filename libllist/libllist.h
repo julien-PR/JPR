@@ -1,6 +1,6 @@
 /*
 	Do:
-		#define LIBLLIST_IMPLEMENTATION 
+		#define JPR_LIBLLIST_IMPLEMENTATION 
 	to get access to the lib functions.
 	This should be done only one time !
 */

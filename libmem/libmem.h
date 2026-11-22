@@ -1,6 +1,6 @@
 /*
 	Do:
-		#define LIBMEM_IMPLEMENTATION 
+		#define JPR_LIBMEM_IMPLEMENTATION 
 	to get access to the lib functions.
 	This should be done only one time !
 */
