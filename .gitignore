@@ -1,0 +1,4 @@
+#testing files
+*.c
+*.o
+Makefile
