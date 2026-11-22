@@ -1,13 +1,13 @@
 /*
 	Do:
-		#define LIBHASHTABLE_IMPLEMENTATION 
+		#define JPR_LIBHASHTABLE_IMPLEMENTATION 
 	to get access to the lib functions.
 	This should be done only one time !
 */
 
 
-#ifndef LIBHASHTABLE_H
-# define LIBHASHTABLE_H
+#ifndef JPR_LIBHASHTABLE_H
+# define JPR_LIBHASHTABLE_H
 
 # include <stdlib.h>
 # include "libllist.h"
@@ -71,11 +71,11 @@ void	hashtableDestroy(t_hashtable *table);
 void	hashtableEntryFuncDestroySet(t_hashtableEntryFuncDestroy fn);
 void	hashtableEntryFuncDupSet(t_hashtableEntryFuncDup fn);
 
-#endif // LIBHASHTABLE_H
+#endif // JPR_LIBHASHTABLE_H
 
-#ifdef LIBHASHTABLE_IMPLEMENTATION
-# ifndef LIBHASHTABLE_IMPLEMENTATION_DONE
-#  define LIBHASHTABLE_IMPLEMENTATION_DONE
+#ifdef JPR_LIBHASHTABLE_IMPLEMENTATION
+# ifndef JPR_LIBHASHTABLE_IMPLEMENTATION_DONE
+#  define JPR_LIBHASHTABLE_IMPLEMENTATION_DONE
 
 # include "libstr.h"
 # include "libmem.h"
@@ -299,6 +299,6 @@ void	hashtableDestroy(t_hashtable *table)
 	return ;
 }
 
-# endif // LIBHASHTABLE_IMPLEMENTATION_DONE
+# endif // JPR_LIBHASHTABLE_IMPLEMENTATION_DONE
 
-#endif // LIBHASHTABLE_IMPLEMENTATION
+#endif // JPR_LIBHASHTABLE_IMPLEMENTATION
