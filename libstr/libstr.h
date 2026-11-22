@@ -426,32 +426,36 @@ char	*strFindN(const char *s, const char *needle, size_t n)
 
 int	strCompare(const char *s1, const char *s2)
 {
-	size_t	index = 0;
+	size_t				index = 0;
+	const unsigned char	*us1 = (const unsigned char	*)s1;
+	const unsigned char	*us2 = (const unsigned char	*)s2;
 
-	if (NULL == s1 && NULL == s2)
+	if (NULL == us1 && NULL == us2)
 		return (0);
-	if (NULL == s1)
-		return (-*s2);
-	if (NULL == s2)
-		return (*s1);
-	while (*(s1 + index) && *(s2 + index) && *(s1 + index) == *(s2 + index))
+	if (NULL == us1)
+		return (-*us2);
+	if (NULL == us2)
+		return (*us1);
+	while (*(us1 + index) && *(us2 + index) && *(us1 + index) == *(us2 + index))
 		++index;
-	return (*(s1 + index) - *(s2 + index));
+	return (*(us1 + index) - *(us2 + index));
 }
 
 int	strCompareN(const char *s1, const char *s2, size_t n)
 {
-	size_t	index = 0;
+	size_t				index = 0;
+	const unsigned char	*us1 = (const unsigned char	*)s1;
+	const unsigned char	*us2 = (const unsigned char	*)s2;
 
-	if ((NULL == s1 && NULL == s2) || 0 == n)
+	if ((NULL == us1 && NULL == us2) || 0 == n)
 		return (0);
-	if (NULL == s1)
-		return (-*s2);
-	if (NULL == s2)
-		return (*s1);
-	while (*(s1 + index) && *(s2 + index) && *(s1 + index) == *(s2 + index) && index < n - 1)
+	if (NULL == us1)
+		return (-*us2);
+	if (NULL == us2)
+		return (*us1);
+	while (*(us1 + index) && *(us2 + index) && *(us1 + index) == *(us2 + index) && index < n - 1)
 		++index;
-	return (*(s1 + index) - *(s2 + index));
+	return (*(us1 + index) - *(us2 + index));
 }
 
 char	*strCopy(char *dst, const char *src)
