@@ -18,10 +18,22 @@
 #  define LIBFILE_BUFFER_SIZE 1024
 # endif
 
+/**
+ * @brief Reads data from @a fd until a line feed '\\n' is found, then returns the line.
+ * @return The allocated line, with the line feed '\\n' at its end, or NULL on failure.
+ */
 char	*fileReadLine(int fd);
 
+/**
+ * @brief Opens the file located at @a path, then reads it entirely.
+ * @return The allocated file content, or NULL on failure
+ */
 char	*fileRead(const char *path);
 
+/**
+ * @brief Reads data from @a fd until nothing's left.
+ * @return The allocated file content, or NULL on failure
+ */
 char	*fileReadFd(int fd);
 
 #endif // JPR_LIBFILE_H
