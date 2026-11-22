@@ -69,7 +69,7 @@ char	*fileReadLine(int fd)
 		}
 		free(tmp);
 	}
-	line = strSub(data, 0, strFindFirstOfChar(data, '\n') - data);
+	line = strSub(data, 0, strFindFirstOfChar(data, '\n') - data + 1);
 	tmp = strSub(data, strFindFirstOfChar(data, '\n') - data + 1, (size_t)-1);
 	if (NULL == line || NULL == tmp)
 	{
