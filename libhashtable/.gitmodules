@@ -1,0 +1,3 @@
+[submodule "libs/JPR"]
+	path = libs/JPR
+	url = https://github.com/julienPR86/JPR.git

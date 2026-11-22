@@ -1,0 +1,13 @@
+#objects files
+objs/
+
+#vscode files
+.vscode/
+
+#valgrind files
+vgcore.*
+
+#test files
+Makefile
+main.c
+main
