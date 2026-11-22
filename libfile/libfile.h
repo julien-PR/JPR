@@ -11,14 +11,16 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+# include <fcntl.h>
 # include "libstr.h"
-# include <stdio.h>
 
 # ifndef LIBFILE_BUFFER_SIZE
 #  define LIBFILE_BUFFER_SIZE 1024
 # endif
 
 char	*fileReadLine(int fd);
+
+char	*fileRead(const char *path);
 
 #endif // JPR_LIBFILE_H
 
@@ -78,6 +80,36 @@ char	*fileReadLine(int fd)
 	free(data);
 	data = tmp;
 	return (line);
+}
+
+char	*fileRead(const char *path)
+{
+	int		fd;
+	char	*data = NULL;
+	char	*line;
+
+	if (NULL == path)
+		return (NULL);
+	if (0 != access(path, F_OK | R_OK))
+		return (NULL);
+	fd = open(path, O_RDONLY);
+	if (-1 == fd)
+		return (NULL);
+	line = fileReadLine(fd);
+	while (line)
+	{
+		if (NULL == strAppend(&data, line))
+		{
+			free(line);
+			free(data);
+			close(fd);
+			return (NULL);
+		}
+		free(line);
+		line = fileReadLine(fd);
+	}
+	close(fd);
+	return (data);
 }
 
 # endif // JPR_LIBFILE_IMPLEMENTATION_DONE
