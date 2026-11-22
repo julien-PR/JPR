@@ -10,13 +10,7 @@
 # define LIBHASHTABLE_H
 
 # include <stdlib.h>
-
-# ifdef LIBHASHTABLE_IMPLEMENTATION
-#  ifndef LIBLLIST_IMPLEMENTATION
-#   define LIBLLIST_IMPLEMENTATION
-#  endif
-# endif
-# include "libs/JPR/libllist/libllist.h"
+# include "libllist.h"
 
 typedef void	(*t_hashtableEntryFuncDestroy)(void *data);
 typedef void	*(*t_hashtableEntryFuncDup)(const void *data);
@@ -77,17 +71,14 @@ void	hashtableDestroy(t_hashtable *table);
 void	hashtableEntryFuncDestroySet(t_hashtableEntryFuncDestroy fn);
 void	hashtableEntryFuncDupSet(t_hashtableEntryFuncDup fn);
 
-# ifdef LIBHASHTABLE_IMPLEMENTATION
+#endif // LIBHASHTABLE_H
 
-# ifndef LIBSTR_IMPLEMENTATION
-#  define LIBSTR_IMPLEMENTATION
-# endif
-# include "libs/JPR/libstr/libstr.h"
+#ifdef LIBHASHTABLE_IMPLEMENTATION
+# ifndef LIBHASHTABLE_IMPLEMENTATION_DONE
+#  define LIBHASHTABLE_IMPLEMENTATION_DONE
 
-# ifndef LIBMEM_IMPLEMENTATION
-#  define LIBMEM_IMPLEMENTATION
-# endif
-# include "libs/JPR/libmem/libmem.h"
+# include "libstr.h"
+# include "libmem.h"
 
 t_hashtableEntryFuncDestroy	private_hashtableEntryDestroyFunc = NULL;
 t_hashtableEntryFuncDup		private_hashtableEntryDupFunc = NULL;
@@ -308,6 +299,6 @@ void	hashtableDestroy(t_hashtable *table)
 	return ;
 }
 
-# endif // LIBHASHTABLE_IMPLEMENTATION
+# endif // LIBHASHTABLE_IMPLEMENTATION_DONE
 
-#endif // LIBHASHTABLE_H
+#endif // LIBHASHTABLE_IMPLEMENTATION
