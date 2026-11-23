@@ -109,17 +109,19 @@ void	*memFindLastByte(const void *s, int c, size_t n)
 
 int	memCompare(const void *s1, const void *s2, size_t n)
 {
-	size_t	index = 0;
+	size_t				index = 0;
+	const unsigned char	*u1 = (const unsigned char *)s1;
+	const unsigned char	*u2 = (const unsigned char *)s2;
 
-	if ((NULL == s1 && NULL == s2) || 0 == n)
+	if ((NULL == u1 && NULL == u2) || 0 == n)
 		return (0);
-	if (NULL == s1)
-		return (-*(unsigned char *)s2);
-	if (NULL == s2)
-		return (*(unsigned char *)s1);
-	while (*((unsigned char *)s1 + index) && *((unsigned char *)s2 + index) && *((unsigned char *)s1 + index) == *((unsigned char *)s2 + index) && index < n - 1)
+	if (NULL == u1)
+		return (-*u2);
+	if (NULL == u2)
+		return (*u1);
+	while (*(u1 + index) && *(u2 + index) && *(u1 + index) == *(u2 + index) && index < n - 1)
 		++index;
-	return (*((unsigned char *)s1 + index) - *((unsigned char *)s2 + index));
+	return (*(u1 + index) - *(u2 + index));
 }
 
 void	*memCopy(void *dst, const void *src, size_t n)
