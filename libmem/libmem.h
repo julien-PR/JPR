@@ -52,6 +52,13 @@ void	*memCopy(void *dst, const void *src, size_t n);
 void	*memMove(void *dst, const void *src, size_t n);
 
 /**
+ * @brief Concatenates the first @a src_size bytes of @a src at the end of @a dst.
+ * @warning @a dst must be large enough to hold the result.
+ * @return @a dst on success, or NULL on failure.
+ */
+void	*memConcat(void *dst, const void *src, size_t dst_size, size_t src_size);
+
+/**
  * @brief Copies at most the first @a n bytes of @a data into an allocated buffer. 
  * @warning undefined behavior may occur in case @a n is greater than @a data size.
  * @return An allocated copy of @a data on success, or NULL on failure.
@@ -154,6 +161,16 @@ void	*memMove(void *dst, const void *src, size_t n)
 		--n;
 	}
 	return (dst);	
+}
+
+void	*memConcat(void *dst, const void *src, size_t dst_size, size_t src_size)
+{
+	if (NULL == dst)
+		return (NULL);
+	if (NULL == src || 0 == src_size || 0 == dst_size)
+		return (dst);
+	memCopy(dst + dst_size, src, src_size);
+	return (dst);
 }
 
 void	*memDup(const void *data, size_t n)
