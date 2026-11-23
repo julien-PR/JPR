@@ -167,7 +167,7 @@ void	*memConcat(void *dst, const void *src, size_t dst_size, size_t src_size)
 {
 	if (NULL == dst)
 		return (NULL);
-	if (NULL == src || 0 == src_size || 0 == dst_size)
+	if (NULL == src || 0 == src_size)
 		return (dst);
 	memCopy(dst + dst_size, src, src_size);
 	return (dst);
