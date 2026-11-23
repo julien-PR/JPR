@@ -25,16 +25,16 @@
 char	*fileReadLine(int fd);
 
 /**
- * @brief Opens the file located at @a path, then reads it entirely.
- * @return The allocated file content, or NULL on failure
- */
-char	*fileRead(const char *path);
-
-/**
  * @brief Reads data from @a fd until nothing's left.
  * @return The allocated file content, or NULL on failure
  */
 char	*fileReadFd(int fd);
+
+/**
+ * @brief Opens the file located at @a path, then reads it entirely.
+ * @return The allocated file content, or NULL on failure
+ */
+char	*fileRead(const char *path);
 
 #endif // JPR_LIBFILE_H
 
@@ -96,36 +96,6 @@ char	*fileReadLine(int fd)
 	return (line);
 }
 
-char	*fileRead(const char *path)
-{
-	int		fd;
-	char	*data = NULL;
-	char	*line;
-
-	if (NULL == path)
-		return (NULL);
-	if (0 != access(path, F_OK | R_OK))
-		return (NULL);
-	fd = open(path, O_RDONLY);
-	if (-1 == fd)
-		return (NULL);
-	line = fileReadLine(fd);
-	while (line)
-	{
-		if (NULL == strAppend(&data, line))
-		{
-			free(line);
-			free(data);
-			close(fd);
-			return (NULL);
-		}
-		free(line);
-		line = fileReadLine(fd);
-	}
-	close(fd);
-	return (data);
-}
-
 char	*fileReadFd(int fd)
 {
 	char	*data = NULL;
@@ -145,6 +115,24 @@ char	*fileReadFd(int fd)
 		free(line);
 		line = fileReadLine(fd);
 	}
+	return (data);
+}
+
+char	*fileRead(const char *path)
+{
+	int		fd;
+	char	*data = NULL;
+	char	*line;
+
+	if (NULL == path)
+		return (NULL);
+	if (0 != access(path, F_OK | R_OK))
+		return (NULL);
+	fd = open(path, O_RDONLY);
+	if (-1 == fd)
+		return (NULL);
+	data = fileReadFd(fd);
+	close(fd);
 	return (data);
 }
 
