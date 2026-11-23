@@ -28,15 +28,17 @@ void	*fileReadLine(int fd, size_t *size);
 
 /**
  * @brief Reads data from @a fd until nothing's left.
+ * @param size The size of the returned data in bytes.
  * @return The allocated file content, or NULL on failure
  */
-char	*fileReadFd(int fd);
+void	*fileReadFd(int fd, size_t *size);
 
 /**
  * @brief Opens the file located at @a path, then reads it entirely.
+ * @param size The size of the returned data in bytes.
  * @return The allocated file content, or NULL on failure
  */
-char	*fileRead(const char *path);
+void	*fileRead(const char *path, size_t *size);
 
 #endif // JPR_LIBFILE_H
 
@@ -128,29 +130,40 @@ void	*fileReadLine(int fd, size_t *sizeptr)
 	return (line);
 }
 
-char	*fileReadFd(int fd)
+void	*fileReadFd(int fd, size_t *size)
 {
-	char	*data = NULL;
-	char	*line;
+	size_t	line_size;
+	void	*line;
+	size_t	total_size = 0;
+	void	*data = NULL;
+	void	*tmp;
 
 	if (fd < 0)
 		return (NULL);
-	line = fileReadLine(fd, NULL);
+	line = fileReadLine(fd, &line_size);
 	while (line)
 	{
-		if (NULL == strAppend(&data, line))
+		tmp = data;
+		data = realloc(data, total_size + line_size);
+		if (NULL == data)
 		{
+			free(tmp);
 			free(line);
-			free(data);
+			if (size)
+				*size = 0;
 			return (NULL);
 		}
+		memConcat(data, line, total_size, line_size);
+		total_size += line_size;
 		free(line);
-		line = fileReadLine(fd, NULL);
+		line = fileReadLine(fd, &line_size);
 	}
+	if (size)
+		*size = total_size;
 	return (data);
 }
 
-char	*fileRead(const char *path)
+void	*fileRead(const char *path, size_t *size)
 {
 	int		fd;
 	char	*data = NULL;
@@ -162,7 +175,7 @@ char	*fileRead(const char *path)
 	fd = open(path, O_RDONLY);
 	if (-1 == fd)
 		return (NULL);
-	data = fileReadFd(fd);
+	data = fileReadFd(fd, size);
 	close(fd);
 	return (data);
 }
