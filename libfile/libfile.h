@@ -122,7 +122,6 @@ char	*fileRead(const char *path)
 {
 	int		fd;
 	char	*data = NULL;
-	char	*line;
 
 	if (NULL == path)
 		return (NULL);
