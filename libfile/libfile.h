@@ -13,6 +13,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include "libstr.h"
+# include "libmem.h"
 
 # ifndef LIBFILE_BUFFER_SIZE
 #  define LIBFILE_BUFFER_SIZE 1024
@@ -20,9 +21,10 @@
 
 /**
  * @brief Reads data from @a fd until a line feed '\\n' is found, then returns the line.
+ * @param size The size of the returned line in bytes.
  * @return The allocated line, with the line feed '\\n' at its end, or NULL on failure.
  */
-char	*fileReadLine(int fd);
+void	*fileReadLine(int fd, size_t *size);
 
 /**
  * @brief Reads data from @a fd until nothing's left.
@@ -42,57 +44,87 @@ char	*fileRead(const char *path);
 # ifndef JPR_LIBFILE_IMPLEMENTATION_DONE
 #  define JPR_LIBFILE_IMPLEMENTATION_DONE
 
-char	*fileReadLine(int fd)
+void	*fileReadLine(int fd, size_t *sizeptr)
 {
-	int			nread;
-	char		*tmp = NULL;
-	char		*line = NULL;
-	static char	*data = NULL;
+	void			*tmp = NULL;
+	void			*line = NULL;
+	void			*buf = NULL;
+	ssize_t			buf_size = 0;
+	static void		*data = NULL;
+	static size_t	data_size = 0;
 
 	if (fd < 0 || LIBFILE_BUFFER_SIZE < 0)
 		return (NULL);
-	while (!strFindFirstOfChar(data, '\n'))
+	while (!memFindFirstByte(data, '\n', data_size))
 	{
-		tmp = malloc(sizeof(char) * LIBFILE_BUFFER_SIZE + 1);
-		if (NULL == tmp)
+		buf = malloc(LIBFILE_BUFFER_SIZE);
+		if (NULL == buf)
 		{
-			free(data);
-			return (NULL);
-		}
-		nread = read(fd, tmp, LIBFILE_BUFFER_SIZE);
-		if (-1 == nread)
-		{
-			free(tmp);
-			free(data);
-			return (NULL);
-		}
-		if (0 == nread)
-		{
-			line = strDup(data);
-			free(tmp);
 			free(data);
 			data = NULL;
-			return (line);
-		}
-		tmp[nread] = '\0';
-		if (NULL == strAppend(&data, tmp))
-		{
-			free(tmp);
-			free(data);
+			data_size = 0;
+			if (sizeptr)
+				*sizeptr = 0;
 			return (NULL);
 		}
-		free(tmp);
+		buf_size = read(fd, buf, LIBFILE_BUFFER_SIZE);
+		if (-1 == buf_size)
+		{
+			free(buf);
+			free(data);
+			data = NULL;
+			data_size = 0;
+			if (sizeptr)
+				*sizeptr = 0;
+			return (NULL);
+		}
+		if (0 == buf_size)
+		{
+			line = memDup(data, data_size);
+			if (sizeptr)
+				*sizeptr = (NULL == line ? 0 : data_size);
+			free(buf);
+			free(data);
+			data = NULL;
+			data_size = 0;
+			return (line);
+		}
+		tmp = malloc(data_size + buf_size);
+		if (NULL == tmp)
+		{
+			free(buf);
+			free(data);
+			data = NULL;
+			data_size = 0;
+			if (sizeptr)
+				*sizeptr = 0;
+			return (NULL);
+		}
+		memCopy(tmp, data, data_size);
+		memConcat(tmp, buf, data_size, buf_size);
+		free(data);
+		data = tmp;
+		data_size += buf_size;
+		free(buf);
 	}
-	line = strSub(data, 0, strFindFirstOfChar(data, '\n') - data + 1);
-	tmp = strSub(data, strFindFirstOfChar(data, '\n') - data + 1, (size_t)-1);
+	size_t	offset = (char *)memFindFirstByte(data, '\n', data_size) - (char *)data + 1;
+	line = memDup(data, offset);
+	tmp = memDup(data + offset, data_size - offset);
 	if (NULL == line || NULL == tmp)
 	{
 		free(line);
 		free(data);
+		data = NULL;
+		data_size = 0;
+		if (sizeptr)
+			*sizeptr = 0;
 		return (NULL);
 	}
 	free(data);
 	data = tmp;
+	data_size -= offset;
+	if (sizeptr)
+		*sizeptr = offset;
 	return (line);
 }
 
@@ -103,7 +135,7 @@ char	*fileReadFd(int fd)
 
 	if (fd < 0)
 		return (NULL);
-	line = fileReadLine(fd);
+	line = fileReadLine(fd, NULL);
 	while (line)
 	{
 		if (NULL == strAppend(&data, line))
@@ -113,7 +145,7 @@ char	*fileReadFd(int fd)
 			return (NULL);
 		}
 		free(line);
-		line = fileReadLine(fd);
+		line = fileReadLine(fd, NULL);
 	}
 	return (data);
 }
