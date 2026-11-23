@@ -51,6 +51,14 @@ void	*memCopy(void *dst, const void *src, size_t n);
  */
 void	*memMove(void *dst, const void *src, size_t n);
 
+/**
+/**
+ * @brief Copies at most the first @a n bytes of @a data into an allocated buffer. 
+ * @warning undefined behavior may occur in case @a n is greater than @a data size.
+ * @return An allocated copy of @a data on success, or NULL on failure.
+ */
+void	*memDup(const void *data, size_t n);
+
 #endif // JPR_LIBMEM_H
 
 #ifdef JPR_LIBMEM_IMPLEMENTATION
@@ -145,6 +153,19 @@ void	*memMove(void *dst, const void *src, size_t n)
 		--n;
 	}
 	return (dst);	
+}
+
+void	*memDup(const void *data, size_t n)
+{
+	void	*dup;
+
+	if (NULL == data)
+		return (NULL);
+	dup = malloc(n);
+	if (NULL == dup)
+		return (NULL);
+	memCopy(dup, data, n);
+	return (dup);
 }
 
 # endif // JPR_LIBMEM_IMPLEMENTATION_DONE
