@@ -52,7 +52,6 @@ void	*memCopy(void *dst, const void *src, size_t n);
 void	*memMove(void *dst, const void *src, size_t n);
 
 /**
-/**
  * @brief Copies at most the first @a n bytes of @a data into an allocated buffer. 
  * @warning undefined behavior may occur in case @a n is greater than @a data size.
  * @return An allocated copy of @a data on success, or NULL on failure.
