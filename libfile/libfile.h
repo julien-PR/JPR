@@ -47,6 +47,12 @@ void	*fileRead(const char *path, size_t *sizeptr);
 int	fileCreate(const char *name);
 
 /**
+ * @brief Opens the file located at @a path using @a flags.
+ * @return The file descriptor of the opened file on success, or -1 on failure.
+ */
+int	fileOpen(const char *path, int flags);
+
+/**
  * @brief Closes every file descriptor in @a fds that is valid.
  * @param n The number of file descriptors in fds.
  */
@@ -196,6 +202,18 @@ int	fileCreate(const char *name)
 		return (-1);
 	fd = open(name, O_CREAT, 0644);
 	if (-1 == fd)
+		return (-1);
+	return (fd);
+}
+
+int	fileOpen(const char *path, int flags)
+{
+	int	fd;
+
+	if (NULL == path)
+		return (-1);
+	fd = open(path, flags, 0644);
+	if (-1 == open)
 		return (-1);
 	return (fd);
 }
