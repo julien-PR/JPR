@@ -17,6 +17,11 @@
 void	*memSet(void *s, int c, size_t n);
 
 /**
+ * @brief Rearranges the first @a n bytes of @a s in the opposite order.
+ */
+void	*memRev(void *s, size_t n);
+
+/**
  * @brief Returns a pointer to the first occurrence of @a c within the first @a n bytes of @a s.
  * @return A pointer to the occurrence, or NULL if @a c is not found.
  */
@@ -80,6 +85,27 @@ void	*memSet(void *s, int c, size_t n)
 	{
 		*((unsigned char *)s + index) = c;
 		++index;
+	}
+	return (s);
+}
+
+void	*memRev(void *s, size_t n)
+{
+	char	*start;
+	char	*end;
+	char 	tmp;
+
+	if (NULL == s || 0 == n)
+		return (s);
+	start = s;
+	end = (char *)s + n - 1;
+	while (start < end)
+	{
+		tmp = *start;
+		*start = *end;
+		*end = tmp;
+		++start;
+		--end;
 	}
 	return (s);
 }
