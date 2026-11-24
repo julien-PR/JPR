@@ -10,17 +10,6 @@
 # define JPR_LIBMEM_H
 
 # include <stdlib.h>
-# include <stdint.h>
-
-/**
- * @brief Converts a 32 bit integer to big endian. Equivalent to htonl.
- */
-uint32_t	memToBigEnd(uint32_t n);
-
-/**
- * @brief Converts a 32 bit integer to little endian. Equivalent to ntohl.
- */
-uint32_t	memToLitEnd(uint32_t n);
 
 /**
  * @brief Sets the firsts @a n bytes from @a s to @a c.
@@ -80,30 +69,6 @@ void	*memDup(const void *data, size_t n);
 #ifdef JPR_LIBMEM_IMPLEMENTATION
 # ifndef JPR_LIBMEM_IMPLEMENTATION_DONE
 #  define JPR_LIBMEM_IMPLEMENTATION_DONE
-
-uint32_t	memToBigEnd(uint32_t n)
-{
-	const uint32_t	_n = 1;
-
-	if (!(1u == *(const unsigned char *)&_n))
-		return (n);
-	return (((n & 0xFF000000) >> 24)
-			| ((n & 0x00FF0000) >> 16)
-			| ((n & 0x0000FF00) << 16)
-			| ((n & 0x000000FF) << 24));
-}
-
-uint32_t	memToLitEnd(uint32_t n)
-{
-	const uint32_t	_n = 1;
-
-	if (1u == *(const unsigned char *)&_n)
-		return (n);
-	return (((n & 0xFF000000) >> 24)
-			| ((n & 0x00FF0000) >> 16)
-			| ((n & 0x0000FF00) << 16)
-			| ((n & 0x000000FF) << 24));
-}
 
 void	*memSet(void *s, int c, size_t n)
 {
