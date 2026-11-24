@@ -46,6 +46,12 @@ void	*fileRead(const char *path, size_t *size);
  */
 int	fileCreate(const char *name);
 
+/**
+ * @brief Closes every file descriptor in @a fds that is valid.
+ * @param n The number of file descriptors in fds.
+ */
+void	fileClose(size_t n, int *fds);
+
 #endif // JPR_LIBFILE_H
 
 #ifdef JPR_LIBFILE_IMPLEMENTATION
@@ -196,6 +202,20 @@ int	fileCreate(const char *name)
 	if (-1 == fd)
 		return (-1);
 	return (fd);
+}
+
+void	fileClose(size_t n, int *fds)
+{
+	if (NULL == fds || 0 == n)
+		return ;
+	for (size_t i = 0; i < n; ++i)
+	{
+		if (*(fds + i) < 0)
+			continue;
+		close(*(fds + i));
+		*(fds + i) = -1;
+	}
+	return ;
 }
 
 # endif // JPR_LIBFILE_IMPLEMENTATION_DONE
