@@ -41,6 +41,12 @@ void	*fileReadFd(int fd, size_t *sizeptr);
 void	*fileRead(const char *path, size_t *sizeptr);
 
 /**
+ * @brief Write @a size bytes from @a data to @a fd.
+ * @return The number of written bytes on success, or -1 on failure.
+ */
+ssize_t	fileWrite(int fd, const void *data, size_t size);
+
+/**
  * @brief Creates and opens as read only the file named @a name. If @a name already exists, opens it as read only.
  * @return The file descriptor of the created file on success, or -1 on failure.
  */
@@ -192,6 +198,22 @@ void	*fileRead(const char *path, size_t *sizeptr)
 	data = fileReadFd(fd, sizeptr);
 	close(fd);
 	return (data);
+}
+
+ssize_t	fileWrite(int fd, const void *data, size_t size)
+{
+	ssize_t	total_written = 0;
+
+	if (fd < 0 || NULL == data || 0 == size)
+		return (0);
+	while ((size_t)total_written < size)
+	{
+		ssize_t	written = write(fd, data + total_written, size - total_written);
+		if (-1 == written)
+			return (-1);
+		total_written += written;
+	}
+	return (total_written);
 }
 
 int	fileCreate(const char *name)
