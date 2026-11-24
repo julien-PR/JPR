@@ -40,6 +40,12 @@ void	*fileReadFd(int fd, size_t *size);
  */
 void	*fileRead(const char *path, size_t *size);
 
+/**
+ * @brief Creates and opens as read only the file named @a name. If @a name already exists, opens it as read only.
+ * @return The file descriptor of the created file on success, or -1 on failure.
+ */
+int	fileCreate(const char *name);
+
 #endif // JPR_LIBFILE_H
 
 #ifdef JPR_LIBFILE_IMPLEMENTATION
@@ -178,6 +184,18 @@ void	*fileRead(const char *path, size_t *size)
 	data = fileReadFd(fd, size);
 	close(fd);
 	return (data);
+}
+
+int	fileCreate(const char *name)
+{
+	int	fd;
+
+	if (NULL == name)
+		return (-1);
+	fd = open(name, O_CREAT, 0644);
+	if (-1 == fd)
+		return (-1);
+	return (fd);
 }
 
 # endif // JPR_LIBFILE_IMPLEMENTATION_DONE
