@@ -67,6 +67,8 @@ void	*fileReadLine(int fd, size_t *sizeptr)
 	static void		*data = NULL;
 	static size_t	data_size = 0;
 
+	if (sizeptr)
+		*sizeptr = 0;
 	if (fd < 0 || LIBFILE_BUFFER_SIZE < 0)
 		return (NULL);
 	while (!memFindFirstByte(data, '\n', data_size))
@@ -77,8 +79,6 @@ void	*fileReadLine(int fd, size_t *sizeptr)
 			free(data);
 			data = NULL;
 			data_size = 0;
-			if (sizeptr)
-				*sizeptr = 0;
 			return (NULL);
 		}
 		buf_size = read(fd, buf, LIBFILE_BUFFER_SIZE);
@@ -88,8 +88,6 @@ void	*fileReadLine(int fd, size_t *sizeptr)
 			free(data);
 			data = NULL;
 			data_size = 0;
-			if (sizeptr)
-				*sizeptr = 0;
 			return (NULL);
 		}
 		if (0 == buf_size)
@@ -110,8 +108,6 @@ void	*fileReadLine(int fd, size_t *sizeptr)
 			free(data);
 			data = NULL;
 			data_size = 0;
-			if (sizeptr)
-				*sizeptr = 0;
 			return (NULL);
 		}
 		memCopy(tmp, data, data_size);
@@ -130,8 +126,6 @@ void	*fileReadLine(int fd, size_t *sizeptr)
 		free(data);
 		data = NULL;
 		data_size = 0;
-		if (sizeptr)
-			*sizeptr = 0;
 		return (NULL);
 	}
 	free(data);
