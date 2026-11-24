@@ -95,7 +95,7 @@ void	*memFindFirstByte(const void *s, int c, size_t n)
 		++index;
 	if (index >= n)
 		return (NULL);
-	return ((void *)s + index);
+	return ((char *)s + index);
 }
 
 void	*memFindLastByte(const void *s, int c, size_t n)
@@ -108,7 +108,7 @@ void	*memFindLastByte(const void *s, int c, size_t n)
 	while (index < n)
 	{
 		if (*((const unsigned char *)s + index) == (unsigned char)c)
-			last = (void *)s + index;
+			last = (char *)s + index;
 		++index;
 	}
 	return (last);
@@ -153,7 +153,7 @@ void	*memMove(void *dst, const void *src, size_t n)
 		return (NULL);
 	if (NULL == src || 0 == n)
 		return (dst);
-	if (dst < src || dst > src + n)
+	if (dst < src || dst > (void *)((char *)src + n))
 		return (memCopy(dst, src, n));
 	while (n > 0)
 	{
@@ -169,7 +169,7 @@ void	*memConcat(void *dst, const void *src, size_t dst_size, size_t src_size)
 		return (NULL);
 	if (NULL == src || 0 == src_size)
 		return (dst);
-	memCopy(dst + dst_size, src, src_size);
+	memCopy((char *)dst + dst_size, src, src_size);
 	return (dst);
 }
 

@@ -131,7 +131,7 @@ void	*fileReadLine(int fd, size_t *sizeptr)
 	}
 	size_t	offset = (char *)memFindFirstByte(data, '\n', data_size) - (char *)data + 1;
 	line = memDup(data, offset);
-	tmp = memDup(data + offset, data_size - offset);
+	tmp = memDup((char *)data + offset, data_size - offset);
 	if (NULL == line || NULL == tmp)
 	{
 		free(line);
@@ -208,7 +208,7 @@ ssize_t	fileWrite(int fd, const void *data, size_t size)
 		return (0);
 	while ((size_t)total_written < size)
 	{
-		ssize_t	written = write(fd, data + total_written, size - total_written);
+		ssize_t	written = write(fd, (char *)data + total_written, size - total_written);
 		if (-1 == written)
 			return (-1);
 		total_written += written;
