@@ -180,6 +180,8 @@ void	*fileRead(const char *path, size_t *size)
 	int		fd;
 	char	*data = NULL;
 
+	if (size)
+		*size = 0;
 	if (NULL == path)
 		return (NULL);
 	if (0 != access(path, F_OK | R_OK))
