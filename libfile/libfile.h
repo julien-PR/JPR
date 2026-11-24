@@ -213,7 +213,7 @@ int	fileOpen(const char *path, int flags)
 	if (NULL == path)
 		return (-1);
 	fd = open(path, flags, 0644);
-	if (-1 == open)
+	if (-1 == fd)
 		return (-1);
 	return (fd);
 }
