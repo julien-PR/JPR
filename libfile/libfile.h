@@ -150,6 +150,8 @@ void	*fileReadFd(int fd, size_t *size)
 	void	*data = NULL;
 	void	*tmp;
 
+	if (size)
+		*size = 0;
 	if (fd < 0)
 		return (NULL);
 	line = fileReadLine(fd, &line_size);
@@ -161,8 +163,6 @@ void	*fileReadFd(int fd, size_t *size)
 		{
 			free(tmp);
 			free(line);
-			if (size)
-				*size = 0;
 			return (NULL);
 		}
 		memConcat(data, line, total_size, line_size);
