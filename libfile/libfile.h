@@ -21,24 +21,24 @@
 
 /**
  * @brief Reads data from @a fd until a line feed '\\n' is found, then returns the line.
- * @param size The size of the returned line in bytes.
+ * @param sizeptr The size of the returned line in bytes.
  * @return The allocated line, with the line feed '\\n' at its end, or NULL on failure.
  */
-void	*fileReadLine(int fd, size_t *size);
+void	*fileReadLine(int fd, size_t *sizeptr);
 
 /**
  * @brief Reads data from @a fd until nothing's left.
- * @param size The size of the returned data in bytes.
+ * @param sizeptr The size of the returned data in bytes.
  * @return The allocated file content, or NULL on failure
  */
-void	*fileReadFd(int fd, size_t *size);
+void	*fileReadFd(int fd, size_t *sizeptr);
 
 /**
  * @brief Opens the file located at @a path, then reads it entirely.
- * @param size The size of the returned data in bytes.
+ * @param sizeptr The size of the returned data in bytes.
  * @return The allocated file content, or NULL on failure
  */
-void	*fileRead(const char *path, size_t *size);
+void	*fileRead(const char *path, size_t *sizeptr);
 
 /**
  * @brief Creates and opens as read only the file named @a name. If @a name already exists, opens it as read only.
@@ -136,7 +136,7 @@ void	*fileReadLine(int fd, size_t *sizeptr)
 	return (line);
 }
 
-void	*fileReadFd(int fd, size_t *size)
+void	*fileReadFd(int fd, size_t *sizeptr)
 {
 	size_t	line_size;
 	void	*line;
@@ -144,8 +144,8 @@ void	*fileReadFd(int fd, size_t *size)
 	void	*data = NULL;
 	void	*tmp;
 
-	if (size)
-		*size = 0;
+	if (sizeptr)
+		*sizeptr = 0;
 	if (fd < 0)
 		return (NULL);
 	line = fileReadLine(fd, &line_size);
@@ -164,18 +164,18 @@ void	*fileReadFd(int fd, size_t *size)
 		free(line);
 		line = fileReadLine(fd, &line_size);
 	}
-	if (size)
-		*size = total_size;
+	if (sizeptr)
+		*sizeptr = total_size;
 	return (data);
 }
 
-void	*fileRead(const char *path, size_t *size)
+void	*fileRead(const char *path, size_t *sizeptr)
 {
 	int		fd;
 	char	*data = NULL;
 
-	if (size)
-		*size = 0;
+	if (sizeptr)
+		*sizeptr = 0;
 	if (NULL == path)
 		return (NULL);
 	if (0 != access(path, F_OK | R_OK))
@@ -183,7 +183,7 @@ void	*fileRead(const char *path, size_t *size)
 	fd = open(path, O_RDONLY);
 	if (-1 == fd)
 		return (NULL);
-	data = fileReadFd(fd, size);
+	data = fileReadFd(fd, sizeptr);
 	close(fd);
 	return (data);
 }
