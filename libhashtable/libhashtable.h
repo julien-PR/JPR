@@ -68,7 +68,14 @@ t_hashtable	*hashtableDup(const t_hashtable *src);
  */
 void	hashtableDestroy(t_hashtable *table);
 
+/**
+ * @brief Sets the destroy function that is called on the entry data when it needs to be destroyed.
+ */
 void	hashtableEntryFuncDestroySet(t_hashtableEntryFuncDestroy fn);
+
+/**
+ * @brief Sets the dup function that is called on the entry data when it needs to be duplicated.
+ */
 void	hashtableEntryFuncDupSet(t_hashtableEntryFuncDup fn);
 
 #endif // JPR_LIBHASHTABLE_H
