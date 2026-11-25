@@ -80,22 +80,22 @@ void	hashtableEntryFuncDupSet(t_hashtableEntryFuncDup fn);
 # include "libstr.h"
 # include "libmem.h"
 
-t_hashtableEntryFuncDestroy	private_hashtableEntryDestroyFunc = NULL;
-t_hashtableEntryFuncDup		private_hashtableEntryDupFunc = NULL;
+t_hashtableEntryFuncDestroy	__private__hashtableEntryDestroyFunc = NULL;
+t_hashtableEntryFuncDup		__private__hashtableEntryDupFunc = NULL;
 
 void	hashtableEntryFuncDestroySet(t_hashtableEntryFuncDestroy fn)
 {
-	private_hashtableEntryDestroyFunc = fn;
+	__private__hashtableEntryDestroyFunc = fn;
 	return ;
 }
 
 void	hashtableEntryFuncDupSet(t_hashtableEntryFuncDup fn)
 {
-	private_hashtableEntryDupFunc = fn;
+	__private__hashtableEntryDupFunc = fn;
 	return ;
 }
 
-static size_t	private_hashTableHash(const char *key)
+static size_t	__private__hashTableHash(const char *key)
 {
 	size_t	hashv = 0;
 
@@ -109,7 +109,7 @@ static size_t	private_hashTableHash(const char *key)
 	return (hashv);
 }
 
-static t_hashtableEntry	*private_hashtableEntryNew(const char *key, void *data)
+static t_hashtableEntry	*__private__hashtableEntryNew(const char *key, void *data)
 {
 	t_hashtableEntry	*new;
 
@@ -126,33 +126,33 @@ static t_hashtableEntry	*private_hashtableEntryNew(const char *key, void *data)
 	return (new);
 }
 
-static t_hashtableEntry	*private_hashtableEntryDup(const t_hashtableEntry *src)
+static t_hashtableEntry	*__private__hashtableEntryDup(const t_hashtableEntry *src)
 {
 	t_hashtableEntry	*dup;
 	void				*data;
 
-	data = private_hashtableEntryDupFunc(src->data);
+	data = __private__hashtableEntryDupFunc(src->data);
 	if (NULL == data)
 		return (NULL);
-	dup = private_hashtableEntryNew(src->key, data);
+	dup = __private__hashtableEntryNew(src->key, data);
 	if (NULL == dup)
 		return (NULL);
 	return (dup);
 }
 
 
-static int 	private_hashtableEntryCompareKeys(const char *key1, const char *key2)
+static int 	__private__hashtableEntryCompareKeys(const char *key1, const char *key2)
 {
 	return (strCompare(key1, key2));
 }
 
-static void	private_hashtableEntryDestroy(t_hashtableEntry *entry)
+static void	__private__hashtableEntryDestroy(t_hashtableEntry *entry)
 {
 	if (NULL == entry)
 		return ;
 	free(entry->key);
-	if (private_hashtableEntryDestroyFunc)
-		private_hashtableEntryDestroyFunc(entry->data);
+	if (__private__hashtableEntryDestroyFunc)
+		__private__hashtableEntryDestroyFunc(entry->data);
 	free(entry);
 	return ;
 }
@@ -182,8 +182,8 @@ t_hashtable	*hashtableSet(t_hashtable *table, const char *key, void *data)
 
 	if (NULL == table || NULL == key)
 		return (NULL);
-	hashv = private_hashTableHash(key);
-	entry = private_hashtableEntryNew(key, data);
+	hashv = __private__hashTableHash(key);
+	entry = __private__hashtableEntryNew(key, data);
 	if (NULL == entry)
 		return (NULL);
 	if (hashv >= table->capacity)
@@ -219,7 +219,7 @@ t_hashtable	*hashtableSet(t_hashtable *table, const char *key, void *data)
 		return (table);
 	}
 
-	t_llist	*node = llistGetFor(*(table->data + hashv), (t_llistCompareFn)&private_hashtableEntryCompareKeys, key);
+	t_llist	*node = llistGetFor(*(table->data + hashv), (t_llistCompareFn)&__private__hashtableEntryCompareKeys, key);
 	if (NULL == node)
 	{
 		if (NULL == llistPushBack(table->data + hashv, llistNew(entry)))
@@ -229,9 +229,9 @@ t_hashtable	*hashtableSet(t_hashtable *table, const char *key, void *data)
 		}
 		return (table);
 	}
-	if (private_hashtableEntryDupFunc)
+	if (__private__hashtableEntryDupFunc)
 	{
-		((t_hashtableEntry *)node->data)->data = private_hashtableEntryDupFunc(data);
+		((t_hashtableEntry *)node->data)->data = __private__hashtableEntryDupFunc(data);
 		if (NULL == ((t_hashtableEntry *)node->data)->data)
 			return (NULL);
 	}
@@ -245,10 +245,10 @@ t_hashtableEntry	*hashtableGet(const t_hashtable *table, const char *key)
 
 	if (NULL == table || NULL == key)
 		return (NULL);
-	hashv = private_hashTableHash(key);
+	hashv = __private__hashTableHash(key);
 	if (hashv >= table->capacity)
 		return (NULL);
-	node = llistGetFor(*(table->data + hashv), (t_llistCompareFn)&private_hashtableEntryCompareKeys, key);
+	node = llistGetFor(*(table->data + hashv), (t_llistCompareFn)&__private__hashtableEntryCompareKeys, key);
 	if (NULL == node)
 		return (NULL);
 	return (node->data);
@@ -268,7 +268,7 @@ t_hashtable	*hashtableDup(const t_hashtable *src)
 	{
 		if (NULL != *(src->data + index))
 		{
-			*(cpy->data + index) = llistDup(*(src->data + index), (t_llistDupFn)&private_hashtableEntryDup, (t_llistDestroyFn)&private_hashtableEntryDestroy);
+			*(cpy->data + index) = llistDup(*(src->data + index), (t_llistDupFn)&__private__hashtableEntryDup, (t_llistDestroyFn)&__private__hashtableEntryDestroy);
 			if (NULL == *(cpy->data + index))
 			{
 				hashtableDestroy(cpy);
@@ -290,7 +290,7 @@ void	hashtableDestroy(t_hashtable *table)
 		{
 			if (NULL == *(table->data + i))
 				continue;
-			llistDestroy(table->data + i, (t_llistDestroyFn)&private_hashtableEntryDestroy);
+			llistDestroy(table->data + i, (t_llistDestroyFn)&__private__hashtableEntryDestroy);
 		}
 		free(table->data);
 		table->data = NULL;
